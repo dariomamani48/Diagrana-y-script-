@@ -1,0 +1,52 @@
+-- notes_db.categories definition
+
+CREATE TABLE `categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `categories_un` (`name`,`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- notes_db.users definition
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_un` (`email`,`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- notes_db.notes definition
+
+CREATE TABLE `notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(100) NOT NULL,
+  `created_at` date NOT NULL,
+  `updated_at` date DEFAULT NULL,
+  `security_level` binary(1) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `content` text NOT NULL,
+  `is_active` binary(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `notes_un` (`id`),
+  KEY `notes_FK` (`user_id`),
+  CONSTRAINT `notes_FK` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- notes_db.notes_categories definition
+
+CREATE TABLE `notes_categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `category_id` int(11) NOT NULL,
+  `note_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `notes_categories_un` (`id`),
+  KEY `notes_categories_FK` (`note_id`),
+  KEY `notes_categories_FK_1` (`category_id`),
+  CONSTRAINT `notes_categories_FK` FOREIGN KEY (`note_id`) REFERENCES `notes` (`id`),
+  CONSTRAINT `notes_categories_FK_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
